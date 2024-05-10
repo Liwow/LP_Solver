@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}模型管理 - 线性规划求解器{% endblock %}
+{% block title2 %}模型管理{% endblock %}
+{% set active_page = 'manage_quiz' %}
+{% block content %}
+    <main class="lyear-layout-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-toolbar clearfix">
+
+                            <div class="toolbar-btn-action">
+                                <a class="btn btn-primary m-r-5"
+                                   href="{{ url_for('admin.train_model', admin_account=admin_account) }}">
+                                    <i class="mdi mdi-plus"></i>新增模型</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>模型编号</th>
+                                        <th>模型名称</th>
+                                        <th>模型描述</th>
+                                        <th>适配问题</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for quiz in quizs %}
+                                        <tr>
+                                            <td>{{ quiz.quiz_id }}</td>
+                                            <td>{{ quiz.quiz_desc }}</td>
+                                            <td>{{ quiz.quiz_opt }}</td>
+                                            <td>{{ quiz.quiz_ans }}</td>
+                                            <td>
+                                                <a class="btn btn-danger"
+                                                   href="{{ url_for('admin.delete_quiz',admin_account=admin_account,quiz_id=quiz.quiz_id) }}">
+                                                    <i class="mdi mdi-window-close"></i>删除</a>
+                                                <a class="btn btn-success"
+                                                   href="{{ url_for('admin.manage_quiz_update',admin_account=admin_account,quiz_id=quiz.quiz_id) }}">
+                                                    <i class="mdi mdi-window-close"></i>编辑</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+
+</body>
+</html>

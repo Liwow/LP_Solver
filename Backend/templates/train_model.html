@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}模型训练 - 线性规划求解器{% endblock %}
+{% block title2 %}模型训练{% endblock %}
+{% set active_page = 'train_model' %}
+{% block content %}
+    <main class="lyear-layout-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                   <form action="{{ url_for('admin.train_model', admin_account=admin_account) }}" method="get">
+                       <input type="hidden" name="admin_account" value="{{ admin_account }}">
+                        <div class="card">
+                            <div class="card-header clearfix">
+                                <div id="LP_Model" >
+                                    <p><img alt="LP_Model" class="text-center"
+                                            src="{{ url_for('static', filename='images/LP_Model.png') }}">
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                             <label for="File_lp" >一键上传实例文件(.lp\.txt)</label>
+                                            <input class="form-control form-control-lg" id="File_lp" type="file" accept=".lp,.txt"
+                                            multiple >
+                            </div>
+
+
+                            <div class="card-body clearfix">
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-2">
+                                     <div class="toolbar-btn-action ">
+                                         <button type="submit" class="btn btn-primary m-r-5 ajax-post" id="startSolveBtn">
+                                             <i class="mdi"></i>开始训练
+                                         </button>
+                                     </div></div>
+                                </div>
+                            </div>
+                        </div>
+                   </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

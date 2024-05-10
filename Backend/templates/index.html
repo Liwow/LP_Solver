@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}首页 - 垃圾分类后台管理{% endblock %}
+{% block title2 %}首页{% endblock %}
+{% set active_page = 'index' %}
+{% block content %}
+    <main class="lyear-layout-content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card bg-primary">
+                        <div class="card-body clearfix">
+                            <div class="pull-right">
+                                <p class="h6 text-white m-t-0">今日求解数</p>
+                                <p class="h3 text-white m-b-0">5</p>
+                            </div>
+                            <div class="pull-left"><span class="img-avatar img-avatar-50 bg-translucent"><i
+                                    class="mdi mdi-matrix fa-1-5x"></i></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card bg-danger">
+                        <div class="card-body clearfix">
+                            <div class="pull-right">
+                                <p class="h6 text-white m-t-0">今日新增问题模型</p>
+                                <p class="h3 text-white m-b-0 ">3</p>
+                            </div>
+                            <div class="pull-left"><span class="img-avatar img-avatar-50 bg-translucent"><i
+                                    class="mdi mdi-database-plus fa-1-5x"></i></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card bg-success">
+                        <div class="card-body clearfix">
+                            <div class="pull-right">
+                                <p class="h6 text-white m-t-0">问题模型总数</p>
+                                <p class="h3 text-white m-b-0">9</p>
+                            </div>
+                            <div class="pull-left"><span class="img-avatar img-avatar-50 bg-translucent"><i
+                                    class="mdi mdi-math-compass fa-1-5x"></i></span></div>
+                        </div>
+                    </div>
+                </div>
+
+<!--                <div class="col-sm-6 col-lg-3">-->
+<!--                    <div class="card bg-purple">-->
+<!--                        <div class="card-body clearfix">-->
+<!--                            <div class="pull-right">-->
+<!--                                <p class="h6 text-white m-t-0">今日新增评论</p>-->
+<!--                                <p class="h3 text-white m-b-0">10条</p>-->
+<!--                            </div>-->
+<!--                            <div class="pull-left"><span class="img-avatar img-avatar-48 bg-translucent"><i-->
+<!--                                    class="mdi mdi-comment-outline fa-1-5x"></i></span></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>求解记录</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas class="js-chartjs-bars"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>新增问题模型</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas class="js-chartjs-lines"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            var $dashChartBarsCnt = jQuery('.js-chartjs-bars')[0].getContext('2d'),
+                $dashChartLinesCnt = jQuery('.js-chartjs-lines')[0].getContext('2d');
+
+            var $dashChartBarsData = {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [
+                    {
+                        label: '求解数',
+                        borderWidth: 1,
+                        borderColor: 'rgba(0,0,0,0)',
+                        backgroundColor: 'rgba(51,202,185,0.5)',
+                        hoverBackgroundColor: "rgba(51,202,185,0.7)",
+                        hoverBorderColor: "rgba(0,0,0,0)",
+                        data: [6, 3, 2, 2, 5, 0, 6]
+                    }
+                ]
+            };
+            var $dashChartLinesData = {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [
+                    {
+                        label: '新增问题',
+                        data: [7, 3, 0, 5, 7, 2, 6],
+                        borderColor: '#358ed7',
+                        backgroundColor: 'rgba(53, 142, 215, 0.175)',
+                        borderWidth: 1,
+                        fill: false,
+                        lineTension: 0.5
+                    }
+                ]
+            };
+
+            new Chart($dashChartBarsCnt, {
+                type: 'bar',
+                data: $dashChartBarsData
+            });
+
+            var myLineChart = new Chart($dashChartLinesCnt, {
+                type: 'line',
+                data: $dashChartLinesData,
+            });
+        });
+    </script>
+{% endblock %}

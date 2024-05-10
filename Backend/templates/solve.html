@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}问题求解 - 线性规划求解器{% endblock %}
+{% block title2 %}问题求解{% endblock %}
+{% set active_page = 'solve' %}
+{% block content %}
+    <main class="lyear-layout-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                   <form action="{{ url_for('admin.solveProblem', admin_account=admin_account) }}" method="get">
+                       <input type="hidden" name="admin_account" value="{{ admin_account }}">
+                        <div class="card">
+                            <div class="card-header clearfix">
+                                <div id="LP_Model" >
+                                    <p><img alt="LP_Model" class="text-center"
+                                            src="{{ url_for('static', filename='images/LP_Model.png') }}">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                         <label for="File_lp" >一键上传实例文件(.lp\.txt)</label>
+                                        <input class="form-control form-control-lg" id="File_lp" type="file" accept=".lp,.txt" multiple >
+                            </div>
+
+                            <div class="card-toolbar clearfix">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <select class="form-control" name="solveWay" id="solveWay">
+                                            <option value="solving">直接求解</option>
+                                            <option value="modeling">模型求解</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <div class="col-md-2">
+                                            <div class="btn-toolbar col-md-3">
+                                                <button type="submit" class="btn btn-primary m-r-5 ajax-post" id="startSolveBtn" name="startSolveBtn">
+                                                    <i class="mdi"></i>开始求解
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="card-body" >
+                                <div class=" mb-3 ">
+                                    <label for="Para_C" class="form-label">参数C</label>
+                                    <input type="text" class="form-control" id="Para_C" name="Para_C">
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="Para_A" class="form-label">参数A</label>
+                                    <textarea class="form-control" rows = "1" id="Para_A" name="Para_A"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="Para_b" class="form-label">参数b</label>
+                                    <input class="form-control" id="Para_b" name="Para_b">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="Para_Aeq" class="form-label">参数Aeq</label>
+                                    <textarea class="form-control" rows = "1" id="Para_Aeq" name="Para_Aeq"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="Para_beq" class="form-label">参数beq</label>
+                                    <input class="form-control" id="Para_beq" name="Para_beq" >
+                                </div>
+                            </div>
+
+                        </div>
+                   </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}求解中，耐心等待哦 - 线性规划求解器{% endblock %}
+
+{% block header %}求解中{% endblock %}
+
+{% block content %}
+<style>
+    .custom-progress-bar {
+        font-size: 20px; /* 设置字体大小 */
+        color: white; /* 设置字体颜色，确保字体可见 */
+        text-align: center; /* 文字居中 */
+        line-height: 40px; /* 调整行高以垂直居中文字，这个值应与进度条高度相同 */
+        width: 0% ; height: 100%; border-radius: 10px;
+    }
+    .full-screen-centered {
+            min-height: 100vh; /* 100% of the viewport height */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-direction: column; /* Stack vertically */
+        }
+</style>
+<main class="lyear-layout-content">
+<input type="hidden" name="admin_account" id="admin_account" value="{{ admin_account }}">
+<div class="container-fluid full-screen-centered" style="height: 100vh;">
+    <div class="progress w-50" style="height: 40px; width: 80%; ">
+        <div class="progress-bar progress-bar-striped progress-bar-animated custom-progress-bar" id="progressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+    <button class="btn btn-primary mt-3">Solving......</button>
+</div>
+</main>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    updateProgress();  // 页面加载完毕时自动开始更新进度
+});
+
+function updateProgress() {
+    $.getJSON('/progress', function(data) {
+        var progress = data.progress;
+        $('#progressBar').css('width', progress + '%').attr('aria-valuenow', progress).text(progress + '%');
+        if (progress < 100) {
+            setTimeout(updateProgress, 1000);  // 每秒更新一次
+        } else {
+            var admin_account = $('#admin_account').val();  // 获取隐藏输入的值
+            window.location.href = '/result?admin_account=' + encodeURIComponent(admin_account);  // 进度完成后跳转
+        }
+    });
+}
+</script>
+</script>
+{% endblock %}

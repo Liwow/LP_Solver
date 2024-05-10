@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}求解结果 - 线性规划求解器{% endblock %}
+{% block title2 %}求解结果{% endblock %}
+{% set active_page = 'result' %}
+{% block content %}
+    <style>
+        #tableContainer {
+            height: 50vh;
+            overflow-y: scroll;
+        }
+        .full-screen-centered {
+            /*min-height: 100vh; !* 100% of the viewport height *!*/
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-direction: column; /* Stack vertically */
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/js/g2.min.js"></script>
+    <script src="../static/js/FileSaver.js"></script>
+
+    <main class="lyear-layout-content">
+        <form action="{{ url_for('admin.solve', admin_account=admin_account) }}" method="get">
+            <div class="container-fluid">
+            <div class="row">
+                <div id="boxForData" onclick="changeToChart()">
+                    <div id="tableContainer">
+                        <table class="table table-hover align-middle ">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>x0</th>
+                                    <th>x1</th>
+                                    <th>...</th>
+                                    <th>x1999</th>
+                                    <th>x2000</th>
+                                    <th>是否可行</th>
+                                    <th>目标函数值</th>
+                                 </tr>
+                             </thead>
+                            <tbody id="csvBody">
+                                <tr>
+                                    <th>1</th>
+                                    <th>0</th>
+                                    <th>0</th>
+                                    <th>...</th>
+                                    <th>1</th>
+                                    <th>0</th>
+                                    <th>1</th>
+                                    <th>653</th>
+                                 </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="full-screen-centered">
+                        <button onclick="startTask()" class="btn btn-primary mt-3">DOWNLOAD</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </form>
+    </main>
+    <script>
+    var table = null
+
+    window.onload = function () {
+        table = document.getElementById('tableContainer')
+        table.hidden = false
+    }
+    var csvContent = null
+    var labelList = [0, 0, 0, 0, 0, 0]
+    var samplecCount = 0
+    var resJson = {}
+    $(document).ready(function () {
+        $.ajax({
+            url: '/download_csv',
+            type: 'GET',
+            success: function (response) {
+                // 在前端显示CSV文件的内容
+                csvContent = response
+                writeCsv()
+            }
+        });
+    });
+
+    function writeCsv() {
+        var csvBody = document.getElementById("csvBody")
+        var frag = document.createDocumentFragment();
+        sampleList = csvContent.split('\n')
+        samplecCount = sampleList.length - 2
+        for (i = 1; i < sampleList.length - 1; i++) {
+            sample = sampleList[i].toString().split(',')
+            tr = document.createElement("tr")
+            for (j = 0; j < 3; j++) {
+                td = document.createElement("td");
+                td.append(sample[j].substring(0, 8));
+                tr.appendChild(td);
+            }
+            centertd = document.createElement("td");
+            centertd.append("...")
+            tr.appendChild(centertd)
+            for (k = sample.length - 3; k < sample.length; k++) {
+                td = document.createElement("td");
+                td.append(sample[k].substring(0, 8));
+                tr.appendChild(td);
+            }
+            var label = parseInt(sample[sample.length - 1])
+            resJson[sample[0]] = label
+            labelList[label] += 1
+            frag.appendChild(tr)
+        }
+        csvBody.appendChild(frag)
+        console.log(labelList)
+        console.log(resJson)
+    }
+    function downloadJson(fileName, json) {
+        const jsonStr = (json instanceof Object) ? JSON.stringify(json) : json;
+
+        const url = window.URL || window.webkitURL || window;
+        const blob = new Blob([jsonStr]);
+        const saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+        saveLink.href = url.createObjectURL(blob);
+        saveLink.download = fileName;
+        saveLink.click();
+    }
+    function saveJson() {
+        var saveFile = JSON.stringify(resJson)
+        var blob = new Blob([saveFile], { type: "text/plain;charset=utf-8" })
+        saveAs(blob, "submit.json")
+    }
+
+    </script>
+
+{% endblock %}
